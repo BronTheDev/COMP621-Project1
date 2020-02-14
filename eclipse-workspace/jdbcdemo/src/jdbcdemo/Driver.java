@@ -5,56 +5,38 @@ import java.util.Scanner;
 public class Driver {
 	
 	
+	private static String user_name = "";
+	private static String password = "";
+	private static String user_role = "";
+	static Scanner user_input;
+	
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		try {
 			// 1. Get a connection
-			Scanner user_input = new Scanner(System.in);
+			user_input = new Scanner(System.in);
 			
 			
 			System.out.println("Please enter your Username, Password, and Role");
 			
 			System.out.print("Username: ");
-			String user_name = user_input.next(); 
+			user_name = user_input.next(); 
 			
 			System.out.print("Password: ");
-			String password = user_input.next();
+			password = user_input.next();
 			
 			System.out.print("Role: ");
-			String user_role = user_input.next();
+			user_role = user_input.next();
 			
 			String ConnectionUrl = "jdbc:sqlserver://DESKTOP-GMPS9UK;databaseName=Hospital;user=" + user_name + ";password=" + password;
 			Connection myConn = DriverManager.getConnection(ConnectionUrl);
 		
 			//make_patient("Redd Foreman", "202 Rainy St", "10836", "862-760-3329", "88", myConn);
-			
-			boolean role_check = check_role(user_name, password, user_role, myConn);
-			
-			if (role_check) {
-				show_patients(myConn);
-				if (user_role.equals("Nurse")) {
-					System.out.println("Would you like to make a patient? Please type \"Yes\"or \"No\" ");
-					String responce = user_input.next();
-					if (responce.equals("Yes")) {
-						System.out.print("Please enter the Patient's Name: ");
-						String name = user_input.next();
-						System.out.print("Please enter the Patient's Address: ");
-						String address = user_input.next();
-						System.out.print("Please enter the Patients ID: ");
-						String ID = user_input.next();
-						System.out.print("Please enter the Patients Phone-Number: ");
-						String phone = user_input.next();
-						System.out.print("Please enter the Patients Current Balance: ");
-						String balance = user_input.next();
-						make_patient(name, address, ID, phone, balance, myConn);
-						
-					}
-				}
-				
-			} else {
-				System.out.println("Acess has been denied for this user. Please check credentials in system input");
-			}
+			boolean role_checked = check_role(user_name, password, user_role, myConn);
+			preform_role(myConn, role_checked);
+			myConn.close();
+			System.exit(1);
 			
 		} catch (Exception exc) {
 			exc.printStackTrace();
@@ -120,6 +102,84 @@ public class Driver {
 				exc.printStackTrace();
 			}
 		
+	}
+	
+	public static void preform_role(Connection myConn, boolean role_check) {
+		boolean role_checked = check_role(user_name, password, user_role, myConn);
+		
+		if (role_checked) {
+			
+			if (user_role.equals("Doctor")) {
+				System.out.println("Would you like to: /n 1: Show specific information for a single patient "
+						+ "/n 2: Display all patient information?");
+				int responce = user_input.nextInt();
+				switch (responce) {
+					case 1:
+						System.out.print("Please enter the Patients ID: ");
+						String ID = user_input.next();
+						try {
+							PreparedStatement myStmt = myConn.prepareStatement("select * from patients where ID=?");
+							myStmt.setString(1, ID);
+							ResultSet rs = myStmt.executeQuery();
+							if (rs.next()) {           
+								System.out.println(rs.getString("name") +  ", " + 
+										rs.getString("address") + ", " + 
+										rs.getString("ID") + ", " +
+										rs.getString("phone_number") + ", " +
+										rs.getInt("account_balance"));
+							}
+						} catch(Exception exc) {
+							System.out.println("Could not execute command. Please check input.");
+							exc.printStackTrace();
+						}
+					case 2:
+						show_patients(myConn);
+				}
+				
+			} else if (user_role.equals("Nurse")) {
+				System.out.println("Would you like to: /n 1: Make a patient "
+						+ "/n 2: Show specific information for a single patient "
+						+ "/n 3: Display all patient information?");
+				int responce = user_input.nextInt();
+				switch (responce) {
+				
+				case 1:
+					System.out.print("Please enter the Patient's Name: ");
+					String new_name = user_input.next();
+					System.out.print("Please enter the Patient's Address: ");
+					String new_address = user_input.next();
+					System.out.print("Please enter the Patients ID: ");
+					String new_ID = user_input.next();
+					System.out.print("Please enter the Patients Phone-Number: ");
+					String new_phone = user_input.next();
+					System.out.print("Please enter the Patients Current Balance: ");
+					String new_balance = user_input.next();
+					make_patient(new_name, new_address, new_ID, new_phone, new_balance, myConn);
+					show_patients(myConn);
+				case 2:
+					System.out.print("Please enter the Patients ID: ");
+					String ID = user_input.next();
+					try {
+						PreparedStatement myStmt = myConn.prepareStatement("select * from patients where ID=?");
+						myStmt.setString(1, ID);
+						ResultSet rs = myStmt.executeQuery();
+						if (rs.next()) {           
+							System.out.println(rs.getString("name") +  ", " + 
+									rs.getString("address") + ", " + 
+									rs.getString("ID") + ", " +
+									rs.getString("phone_number") + ", " +
+									rs.getInt("account_balance"));
+						}
+					} catch(Exception exc) {
+						System.out.println("Could not execute command. Please check input.");
+						exc.printStackTrace();
+					}
+				case 3:
+					show_patients(myConn);
+					
+				}
+			}
+		}
 	}
 	
 	public static void show_patients(Connection myConn) {
