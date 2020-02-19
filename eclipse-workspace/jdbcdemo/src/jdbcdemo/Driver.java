@@ -108,15 +108,15 @@ public class Driver {
 		boolean role_checked = check_role(user_name, password, user_role, myConn);
 		
 		if (role_checked) {
-			
+			user_input = new Scanner(System.in);
 			if (user_role.equals("Doctor")) {
-				System.out.println("Would you like to: /n 1: Show specific information for a single patient "
-						+ "/n 2: Display all patient information?");
+				System.out.println("Would you like to: \n 1: Show specific information for a single patient "
+						+ "\n 2: Display all patient information?");
 				int responce = user_input.nextInt();
 				switch (responce) {
 					case 1:
 						System.out.print("Please enter the Patients ID: ");
-						String ID = user_input.next();
+						String ID = getInput();
 						try {
 							PreparedStatement myStmt = myConn.prepareStatement("select * from patients where ID=?");
 							myStmt.setString(1, ID);
@@ -137,23 +137,25 @@ public class Driver {
 				}
 				
 			} else if (user_role.equals("Nurse")) {
-				System.out.println("Would you like to: /n 1: Make a patient "
-						+ "/n 2: Show specific information for a single patient "
-						+ "/n 3: Display all patient information?");
+				System.out.println("Would you like to: \n 1: Make a patient "
+						+ "\n 2: Show specific information for a single patient "
+						+ "\n 3: Display all patient information?");
 				int responce = user_input.nextInt();
 				switch (responce) {
 				
 				case 1:
-					System.out.print("Please enter the Patient's Name: ");
-					String new_name = user_input.next();
-					System.out.print("Please enter the Patient's Address: ");
-					String new_address = user_input.next();
-					System.out.print("Please enter the Patients ID: ");
-					String new_ID = user_input.next();
-					System.out.print("Please enter the Patients Phone-Number: ");
-					String new_phone = user_input.next();
-					System.out.print("Please enter the Patients Current Balance: ");
-					String new_balance = user_input.next();
+					System.out.println("Please enter the Patient's Name, Address, ID, Phone, and Balance: ");
+					
+					System.out.print("Name: ");
+					String new_name = getInput();
+					System.out.print("Address: ");
+					String new_address = getInput();
+					System.out.print("ID: ");
+					String new_ID = getInput();
+					System.out.println("Phone-Number: ");
+					String new_phone = getInput();
+					System.out.println("Current Balance: ");
+					String new_balance = getInput();
 					make_patient(new_name, new_address, new_ID, new_phone, new_balance, myConn);
 					show_patients(myConn);
 				case 2:
@@ -206,6 +208,10 @@ public class Driver {
 			exc.printStackTrace();
 		}
 			
+	}
+	private static String getInput() {
+	    Scanner scanner = new Scanner(System.in);
+	    return scanner.nextLine();
 	}
 	
 
