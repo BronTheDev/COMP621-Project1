@@ -127,16 +127,16 @@ public class Login extends javax.swing.JFrame {
     	
     }//GEN-LAST:event_UserNameActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    @SuppressWarnings("static-access")
+	private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
     	char[] password = Password.getPassword();
     	String pw = "";
     	for (int i = 0; i < password.length; i++ ) {
     		pw += password[i];
+    		password[i] = '0';
     	}
-    	
     	 Driver login_Driver = new Driver(UserName.getText(),pw,"Doctor");
-    	 System.out.println(pw);
     	 login_Driver.start_connection();
     }//GEN-LAST:event_jButton1ActionPerformed
 
