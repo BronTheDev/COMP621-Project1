@@ -10,11 +10,15 @@ package jdbcdemo;
  *
  * @author atmoore3
  */
+import java.sql.*;
 public class Login extends javax.swing.JFrame {
 
     /**
      * Creates new form Login
      */
+	
+	private String ConnectionUrl = "";
+	
     public Login() {
         initComponents();
     }
@@ -35,7 +39,7 @@ public class Login extends javax.swing.JFrame {
         passLabel = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-
+        
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 0, 51), 10));
@@ -120,10 +124,20 @@ public class Login extends javax.swing.JFrame {
 
     private void UserNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UserNameActionPerformed
         // TODO add your handling code here:
+    	
     }//GEN-LAST:event_UserNameActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+    	char[] password = Password.getPassword();
+    	String pw = "";
+    	for (int i = 0; i < password.length; i++ ) {
+    		pw += password[i];
+    	}
+    	
+    	 Driver login_Driver = new Driver(UserName.getText(),pw,"Doctor");
+    	 System.out.println(pw);
+    	 login_Driver.start_connection();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

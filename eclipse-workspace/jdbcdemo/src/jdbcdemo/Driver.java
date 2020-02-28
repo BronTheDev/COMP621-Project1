@@ -9,8 +9,16 @@ public class Driver {
 	private static String password = "";
 	private static String user_role = "";
 	static Scanner user_input;
+	private static String ConnectionUrl = "";
+	private static Connection myConn;
 	
-
+	public Driver (String userN, String passW, String userR) {
+		setUser_name(userN);
+		setPassword(passW);
+		setUser_role(userR);
+		setConnectionUrl("jdbc:sqlserver://DESKTOP-GMPS9UK;databaseName=Hospital;user=" + userN + ";password=" + passW);
+	}
+/*
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		try {
@@ -21,19 +29,19 @@ public class Driver {
 			System.out.println("Please enter your Username, Password, and Role");
 			
 			System.out.print("Username: ");
-			user_name = user_input.next(); 
+			setUser_name(user_input.next()); 
 			
 			System.out.print("Password: ");
-			password = user_input.next();
+			setPassword(user_input.next());
 			
 			System.out.print("Role: ");
-			user_role = user_input.next();
+			setUser_role(user_input.next());
 			
-			String ConnectionUrl = "jdbc:sqlserver://DESKTOP-GMPS9UK;databaseName=Hospital;user=" + user_name + ";password=" + password;
+			String ConnectionUrl = "jdbc:sqlserver://DESKTOP-GMPS9UK;databaseName=Hospital;user=" + getUser_name() + ";password=" + getPassword();
 			Connection myConn = DriverManager.getConnection(ConnectionUrl);
 		
 			//make_patient("Redd Foreman", "202 Rainy St", "10836", "862-760-3329", "88", myConn);
-			boolean role_checked = check_role(user_name, password, user_role, myConn);
+			boolean role_checked = check_role(getUser_name(), getPassword(), getUser_role(), myConn);
 			preform_role(myConn, role_checked);
 			myConn.close();
 			System.exit(1);
@@ -42,7 +50,23 @@ public class Driver {
 			exc.printStackTrace();
 		}
 	}
-
+	*/
+	
+	public static void start_connection() {
+		
+		try {
+			Connection myConn = DriverManager.getConnection(getConnectionUrl());
+			
+			//make_patient("Redd Foreman", "202 Rainy St", "10836", "862-760-3329", "88", myConn);
+			boolean role_checked = check_role(getUser_name(), getPassword(), getUser_role(), myConn);
+			preform_role(myConn, role_checked);
+			myConn.close();
+			System.exit(1);
+		} catch (Exception exc) {
+			exc.printStackTrace();
+		}
+	}
+			
 	public static boolean check_role(String user_name, String password,String user_role, Connection myConn) {
 		try {
 		
@@ -105,11 +129,11 @@ public class Driver {
 	}
 	
 	public static void preform_role(Connection myConn, boolean role_check) {
-		boolean role_checked = check_role(user_name, password, user_role, myConn);
+		boolean role_checked = check_role(getUser_name(), getPassword(), getUser_role(), myConn);
 		
 		if (role_checked) {
 			user_input = new Scanner(System.in);
-			if (user_role.equals("Doctor")) {
+			if (getUser_role().equals("Doctor")) {
 				System.out.println("Would you like to: \n 1: Show specific information for a single patient "
 						+ "\n 2: Display all patient information?");
 				int responce = user_input.nextInt();
@@ -136,7 +160,7 @@ public class Driver {
 						show_patients(myConn);
 				}
 				
-			} else if (user_role.equals("Nurse")) {
+			} else if (getUser_role().equals("Nurse")) {
 				System.out.println("Would you like to: \n 1: Make a patient "
 						+ "\n 2: Show specific information for a single patient "
 						+ "\n 3: Display all patient information?");
@@ -212,6 +236,46 @@ public class Driver {
 	private static String getInput() {
 	    Scanner scanner = new Scanner(System.in);
 	    return scanner.nextLine();
+	}
+
+	private static String getPassword() {
+		return password;
+	}
+
+	private static void setPassword(String password) {
+		Driver.password = password;
+	}
+
+	private static String getUser_name() {
+		return user_name;
+	}
+
+	private static void setUser_name(String user_name) {
+		Driver.user_name = user_name;
+	}
+
+	private static String getUser_role() {
+		return user_role;
+	}
+
+	private static void setUser_role(String user_role) {
+		Driver.user_role = user_role;
+	}
+
+	private static Connection getMyConn() {
+		return myConn;
+	}
+
+	private static void setMyConn(Connection myConn) {
+		Driver.myConn = myConn;
+	}
+
+	private static String getConnectionUrl() {
+		return ConnectionUrl;
+	}
+
+	public static void setConnectionUrl(String connectionUrl) {
+		Driver.ConnectionUrl = connectionUrl;
 	}
 	
 
