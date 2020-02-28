@@ -161,9 +161,9 @@ public class Nurses extends javax.swing.JFrame {
             }
         });
 
-        addressField.setText("Insert Name");
+        addressField.setText("Insert address");
 
-        phoneField.setText("Insert Name");
+        phoneField.setText("Insert Number");
 
         nameLabel.setText("Insert Name");
 
@@ -173,7 +173,7 @@ public class Nurses extends javax.swing.JFrame {
 
         jLabel6.setText("Insert Number");
 
-        idField.setText("Insert Name");
+        idField.setText("Insert ID");
         idField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 idFieldActionPerformed(evt);
