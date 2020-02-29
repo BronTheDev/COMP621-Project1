@@ -5,8 +5,6 @@
  */
 package jdbcdemo;
 
-import javafx.application.Platform;
-
 /**
  *
  * @author atmoore3
@@ -294,7 +292,6 @@ public class Nurses extends javax.swing.JFrame {
 
     private void Log_Out_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Log_Out_ButtonActionPerformed
         // TODO add your handling code here:
-                Platform.exit();
                 System.exit(0);
     }//GEN-LAST:event_Log_Out_ButtonActionPerformed
 
