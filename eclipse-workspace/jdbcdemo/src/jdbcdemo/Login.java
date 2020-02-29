@@ -11,6 +11,9 @@ package jdbcdemo;
  * @author atmoore3
  */
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import static javax.swing.JOptionPane.showMessageDialog;
 public class Login extends javax.swing.JFrame {
 
     /**
@@ -31,7 +34,7 @@ public class Login extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
+	LocalDateTime localdate = LocalDateTime.now();
         jPanel1 = new javax.swing.JPanel();
         UserName = new javax.swing.JTextField();
         Password = new javax.swing.JPasswordField();
@@ -136,8 +139,12 @@ public class Login extends javax.swing.JFrame {
     		pw += password[i];
     		password[i] = '0';
     	}
-    	 Driver login_Driver = new Driver(UserName.getText(),pw,"Doctor");
-    	 login_Driver.start_connection();
+	 
+    	Driver login_Driver = new Driver(UserName.getText(),pw,"Doctor");
+	LocalDateTime localDate = LocalDateTime.now();
+    	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM-dd-YY h:mm a");
+        login_Driver.start_connection();
+	showMessageDialog(null, "TimeStamp \n" + dtf.format(localDate));
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
